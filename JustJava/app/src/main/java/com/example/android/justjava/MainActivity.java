@@ -10,6 +10,7 @@ package com.example.android.justjava;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 /**
@@ -38,9 +39,20 @@ public class MainActivity extends AppCompatActivity {
         display(quantity);
     }
 
+    private int calculatePrice() {
+        int price = quantity * 5;
+        return price;
+    }
+
     public void submitOrder(View view) {
-        String message = "Total: $" + (quantity*5) + "\nThank you!";
-        displayMessage(message);
+        CheckBox whippedCream = (CheckBox) findViewById(R.id.whipped_checkbox);
+        boolean hasWhippedCream = whippedCream.isChecked();
+        CheckBox chocolate = (CheckBox) findViewById(R.id.chocolate_checkbox);
+        boolean hasChoc = chocolate.isChecked();
+        int price = calculatePrice();
+        String priceMessage = createOrderSummary(price, hasWhippedCream, hasChoc);
+        displayMessage(priceMessage);
+
     }
 
     /**
@@ -55,8 +67,17 @@ public class MainActivity extends AppCompatActivity {
      * This method displays the given text on the screen.
      */
     private void displayMessage(String message) {
-        TextView priceTextView = (TextView) findViewById(R.id.price_text_view);
-        priceTextView.setText(message);
+        TextView orderSummaryTextView = (TextView) findViewById(R.id.order_summary_text_view);
+        orderSummaryTextView.setText(message);
     }
 
+    private String createOrderSummary(int price, boolean addWhippedCream, boolean addChoc) {
+        String priceMessage = "Name: Sameer Khan";
+        priceMessage += "\nAdd whipped cream? " + addWhippedCream;
+        priceMessage += "\nAdd chocolate? " + addChoc;
+        priceMessage += "\nQuantity: " + quantity;
+        priceMessage += "\nTotal: $" + price;
+        priceMessage += "\nThank You!";
+        return priceMessage;
+    }
 }
